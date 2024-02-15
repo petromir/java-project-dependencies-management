@@ -1,0 +1,43 @@
+image: maven:3-eclipse-temurin-21-alpine
+
+variables:
+  # --batch-mode -> runs in non-interactive (batch) mode (disables output color)
+  # Enables using of Nexus as a mirror to speed up artifact downloading when Nexus is installed on-premise
+  MAVEN_CLI_OPTS: "--settings $CI_PROJECT_DIR/ci-cd/.m2/settings.xml --batch-mode"
+  # Speeds up the build by creating a local repository and reusing the one created by the previous build
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/ci-cd/.m2/repository"
+
+stages:
+  - distribute-to-remote-nexus
+
+distribute-internal-dependencies-remote-nexus:
+  stage: distribute-to-remote-nexus
+  script:
+    - cd internal
+    - mvn $MAVEN_CLI_OPTS deploy
+  only:
+    changes:
+      - internal-dependencies/pom.xml
+      - .gitlab-ci.yml
+    refs:
+      - main
+  artifacts:
+    paths:
+      - 'ci-cd/.m2/repository/*'
+    expire_in: 2 days
+
+distribute-external-dependencies-remote-nexus:
+  stage: distribute-to-remote-nexus
+  script:
+    - cd external
+    - mvn $MAVEN_CLI_OPTS deploy
+  only:
+    changes:
+      - external-dependencies/pom.xml
+      - .gitlab-ci.yml
+    refs:
+      - main
+  artifacts:
+    paths:
+      - 'ci-cd/.m2/repository/*'
+    expire_in: 2 days
