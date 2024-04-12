@@ -13,7 +13,7 @@ stages:
 distribute-internal-dependencies-remote-nexus:
   stage: distribute-to-remote-nexus
   script:
-    - cd internal
+    - cd internal-dependencies
     - mvn $MAVEN_CLI_OPTS deploy
   only:
     changes:
@@ -29,7 +29,7 @@ distribute-internal-dependencies-remote-nexus:
 distribute-external-dependencies-remote-nexus:
   stage: distribute-to-remote-nexus
   script:
-    - cd external
+    - cd external-dependencies
     - mvn $MAVEN_CLI_OPTS deploy
   only:
     changes:

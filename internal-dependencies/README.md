@@ -40,7 +40,7 @@ Change the version by adding a `-SNAPSHOT` suffix in the [pom.xml](pom.xml) file
     <dependencies>
         <dependency>
             <groupId>com.petromirdzhunev</groupId>
-            <artifactId>internal-libs-bom</artifactId>
+            <artifactId>internal-dependencies</artifactId>
             <version>${latest_internal_dependencies_version}-SNAPSHOT</version>
             <type>pom</type>
             <scope>import</scope>
